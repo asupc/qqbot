@@ -93,7 +93,7 @@ nohup ./go-cqhttp   ## 后台运行
 
 
  ## QQBot 配置文件
-
+```
  {
   "Logging": {
     "LogLevel": {
@@ -151,3 +151,4 @@ nohup ./go-cqhttp   ## 后台运行
     "QueryJob": "0 0 12 * * ? *"    // 定时推送账号信息Cron表达式
   }
 }
+```
