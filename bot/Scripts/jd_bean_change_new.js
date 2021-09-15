@@ -117,7 +117,7 @@ async function showMsg() {
 
         }
     }
-    ReturnMessage += `🧧🧧🧧🧧红包明细🧧🧧🧧🧧`;
+    ReturnMessage += `[CQ:face,id=192][CQ:face,id=192][CQ:face,id=192][CQ:face,id=192]红包明细[CQ:face,id=192][CQ:face,id=192][CQ:face,id=192][CQ:face,id=192]`;
     ReturnMessage += `${$.message}\n`;
     allMessage += ReturnMessage;
     //$.msg($.name, '', ReturnMessage, { "open-url": "https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean" });
@@ -363,11 +363,11 @@ function redPacket() {
                         $.jdhRed = $.jdhRed.toFixed(2)
                         $.balance = data.balance
                         $.expiredBalance = ($.jxRedExpire + $.jsRedExpire + $.jdRedExpire).toFixed(2)
-                        $.message += `\n当前总红包：${$.balance}(今日总过期${$.expiredBalance})元 🧧
-京喜红包：${$.jxRed}(今日将过期${$.jxRedExpire.toFixed(2)})元 🧧
-极速红包：${$.jsRed}(今日将过期${$.jsRedExpire.toFixed(2)})元 🧧
-京东红包：${$.jdRed}(今日将过期${$.jdRedExpire.toFixed(2)})元 🧧
-健康红包：${$.jdhRed}(今日将过期${$.jdhRedExpire.toFixed(2)})元 🧧`;
+                        $.message += `\n当前总红包：${$.balance}(今日总过期${$.expiredBalance})元 [CQ:face,id=192]
+京喜红包：${$.jxRed}(今日将过期${$.jxRedExpire.toFixed(2)})元 [CQ:face,id=192]
+极速红包：${$.jsRed}(今日将过期${$.jsRedExpire.toFixed(2)})元 [CQ:face,id=192]
+京东红包：${$.jdRed}(今日将过期${$.jdRedExpire.toFixed(2)})元 [CQ:face,id=192]
+健康红包：${$.jdhRed}(今日将过期${$.jdhRedExpire.toFixed(2)})元 [CQ:face,id=192]`;
                     } else {
                         console.log(`京东服务器返回空数据`)
                     }
