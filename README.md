@@ -14,7 +14,7 @@ cd /roo/qqbot1 && docker-compose up -d ## 启动qqbot
 
 ## 浏览器输入地址：
 
-## http://ip:5010/login.html 自己初始化设置用户名密码，及数据库。初始化后请重启容器。
+http://ip:5010/login.html 自己初始化设置用户名密码，及数据库。初始化后请重启容器。
 
 ```
 docker restart qqbot
