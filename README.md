@@ -1,5 +1,6 @@
 ---
-普通docker用户使用教程
+一般docker用户参考 docker-compose.yaml
+群晖用户参考 asupc-qqbot.json
 ---
 ## 直接克隆本仓库地址。
 
