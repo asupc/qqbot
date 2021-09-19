@@ -10,6 +10,4 @@ services:
     volumes:
       - ./config:/app/config
       - ./db:/app/db
-      - ./scripts:/app/scripts
       - ./logs:/app/logs
-      - ./wwwroot:/app/wwwroot

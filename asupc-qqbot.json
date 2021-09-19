@@ -69,18 +69,8 @@
          "type" : "rw"
       },
       {
-         "host_volume_file" : "/docker/qqbot/scripts",
-         "mount_point" : "/app/scripts",
-         "type" : "rw"
-      },
-      {
          "host_volume_file" : "/docker/qqbot/config",
          "mount_point" : "/app/config",
-         "type" : "rw"
-      },
-      {
-         "host_volume_file" : "/docker/qqbot/wwwroot",
-         "mount_point" : "/app/wwwroot",
          "type" : "rw"
       }
    ]
