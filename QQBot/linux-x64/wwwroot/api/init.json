@@ -1,0 +1,51 @@
+{
+  "homeInfo": {
+    "title": "账号管理",
+    "href": "page/jdCookie.html"
+  },
+  "logoInfo": {
+    "title": "QQBot",
+    "image": "images/qqbot.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "账号管理",
+          "href": "page/jdCookie.html",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "青龙面板",
+          "href": "page/qinglong.html",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "快捷回复",
+          "href": "page/command.html",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "系统设置",
+          "href": "page/setting.html",
+          "icon": "fa fa-gears",
+          "target": "_self"
+        },
+        {
+          "title": "数据导入",
+          "href": "page/importData.html",
+          "icon": "fa fa-gears",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}
