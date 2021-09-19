@@ -1,0 +1,87 @@
+{
+   "cap_add" : null,
+   "cap_drop" : null,
+   "cmd" : "",
+   "cpu_priority" : 50,
+   "devices" : null,
+   "enable_publish_all_ports" : false,
+   "enable_restart_policy" : false,
+   "enabled" : false,
+   "entrypoint_default" : "dotnet QQBot.Web.dll",
+   "env_variables" : [
+      {
+         "key" : "PATH",
+         "value" : "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      },
+      {
+         "key" : "ASPNETCORE_URLS",
+         "value" : "http://+:80"
+      },
+      {
+         "key" : "DOTNET_RUNNING_IN_CONTAINER",
+         "value" : "true"
+      },
+      {
+         "key" : "DOTNET_VERSION",
+         "value" : "5.0.10"
+      },
+      {
+         "key" : "ASPNET_VERSION",
+         "value" : "5.0.10"
+      }
+   ],
+   "exporting" : false,
+   "id" : "ddf3d1bfe33563c68eff763e26b1d3bb5e1ecbd5605f0d3cea473ad2b472ba0a",
+   "image" : "asupc/qqbot:latest",
+   "is_ddsm" : false,
+   "is_package" : false,
+   "links" : [],
+   "memory_limit" : 0,
+   "name" : "qqbot",
+   "network" : [
+      {
+         "driver" : "bridge",
+         "name" : "bridge"
+      }
+   ],
+   "network_mode" : "bridge",
+   "port_bindings" : [
+      {
+         "container_port" : 5010,
+         "host_port" : 5010,
+         "type" : "tcp"
+      }
+   ],
+   "privileged" : false,
+   "shortcut" : {
+      "enable_shortcut" : false
+   },
+   "use_host_network" : false,
+   "volume_bindings" : [
+      {
+         "host_volume_file" : "/docker/qqbot/logs",
+         "mount_point" : "/app/logs",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/qqbot/db",
+         "mount_point" : "/app/db",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/qqbot/scripts",
+         "mount_point" : "/app/scripts",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/qqbot/config",
+         "mount_point" : "/app/config",
+         "type" : "rw"
+      },
+      {
+         "host_volume_file" : "/docker/qqbot/wwwroot",
+         "mount_point" : "/app/wwwroot",
+         "type" : "rw"
+      }
+   ]
+}

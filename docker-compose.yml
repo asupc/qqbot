@@ -1,0 +1,15 @@
+version: '3'
+services:
+  qqbot:
+    image: asupc/qqbot
+    restart: always
+    privileged: true
+    container_name: qqbot1
+    ports:
+      - 5010:5010
+    volumes:
+      - ./config:/app/config
+      - ./db:/app/db
+      - ./scripts:/app/scripts
+      - ./logs:/app/logs
+      - ./wwwroot:/app/wwwroot
