@@ -1,10 +1,10 @@
 
-## 一般docker用户参考 docker-compose.yaml
-## 群晖用户参考 asupc-qqbot.json
-## 推荐使用docker-compose 启动，使用sqlite 注意挂载 db 文件夹
-## /app/config/InstallConfig.xml为配置文件，配置错误无法启动请删除该文件后重新初始化。
+# 一般docker用户参考 docker-compose.yaml
+# 群晖用户参考 asupc-qqbot.json
+# 推荐使用docker-compose 启动，使用sqlite 注意挂载 db，config 文件夹
+# /app/config/InstallConfig.xml为配置文件，配置错误无法启动请删除该文件后重新初始化。
 
-## 如无docker-compose 
+# docker run 运行 
 
 ```
 docker run --name qqbot1 -v /root/qqbot1/db:/app/db -v /root/qqbot1/config:/app/config -p 5010:5010 asupc/qqbot -restart:always
