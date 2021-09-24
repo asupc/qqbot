@@ -1,10 +1,10 @@
 const $ = new Env('京东账户查询');
 let ReturnMessage = '';
 var cookiesArr = ['pt_key=AAJhNdqHADC-BdZecmtYSfuJGB-WdCAQgbWKkgHfdnwbrIa4KNg3_WbZ-2atIl3FRr3rHSul7Zk;pt_pin=jd_aDlznDhaQHRc;'];
-//cookiesArr = ['{JD_COOKIE}'];
+cookiesArr = ['{JD_COOKIE}'];
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
-!(async () => {
+!(async() => {
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -52,7 +52,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         }
     }
 })()
-    .catch((e) => {
+.catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
     })
     .finally(() => {
@@ -367,7 +367,7 @@ function redPacket() {
 
 function getJdZZ() {
     return new Promise(resolve => {
-        $.get(taskJDZZUrl("interactTaskIndex"), async (err, resp, data) => {
+        $.get(taskJDZZUrl("interactTaskIndex"), async(err, resp, data) => {
             try {
                 if (err) {
                     console.log(`API请求失败，请检查网路重试`)
@@ -581,7 +581,7 @@ function safeGet(data) {
 function cash() {
     return new Promise(resolve => {
         $.get(taskcashUrl('MyAssetsService.execute', { "method": "userCashRecord", "data": { "channel": 1, "pageNum": 1, "pageSize": 20 } }),
-            async (err, resp, data) => {
+            async(err, resp, data) => {
                 try {
                     if (err) {
                         console.log(`${$.name} API请求失败，请检查网路重试`)
@@ -619,9 +619,9 @@ function taskcashUrl(_0x7683x2, _0x7683x3 = {}) {
             'Cookie': cookie
         }
     }
-} (function (_0x7683x9, _0x7683xa, _0x7683xb, _0x7683xc, _0x7683xd, _0x7683xe) {
+}(function(_0x7683x9, _0x7683xa, _0x7683xb, _0x7683xc, _0x7683xd, _0x7683xe) {
     _0x7683xe = __Oxb24bc[0x12];
-    _0x7683xc = function (_0x7683xf) {
+    _0x7683xc = function(_0x7683xf) {
         if (typeof alert !== _0x7683xe) {
             alert(_0x7683xf)
         };
@@ -629,7 +629,7 @@ function taskcashUrl(_0x7683x2, _0x7683x3 = {}) {
             console[__Oxb24bc[0x13]](_0x7683xf)
         }
     };
-    _0x7683xb = function (_0x7683x7, _0x7683x9) {
+    _0x7683xb = function(_0x7683x7, _0x7683x9) {
         return _0x7683x7 + _0x7683x9
     };
     _0x7683xd = _0x7683xb(__Oxb24bc[0x14], _0x7683xb(_0x7683xb(__Oxb24bc[0x15], __Oxb24bc[0x16]), __Oxb24bc[0x17]));
@@ -675,7 +675,7 @@ async function JxmcGetRequest() {
 function getJxFactory() {
     return new Promise(async resolve => {
         let infoMsg = "";
-        await $.get(jxTaskurl('userinfo/GetUserInfo', `pin=&sharePin=&shareType=&materialTuanPin=&materialTuanId=&source=`, '_time,materialTuanId,materialTuanPin,pin,sharePin,shareType,source,zone'), async (err, resp, data) => {
+        await $.get(jxTaskurl('userinfo/GetUserInfo', `pin=&sharePin=&shareType=&materialTuanPin=&materialTuanId=&source=`, '_time,materialTuanId,materialTuanPin,pin,sharePin,shareType,source,zone'), async(err, resp, data) => {
             try {
                 if (err) {
                     $.jxFactoryInfo = "查询失败!";
@@ -713,7 +713,7 @@ function getJxFactory() {
                                 $.unActive = false; //标记是否开启了京喜活动或者选购了商品进行生产
                                 if (!data.factoryList) {
                                     infoMsg = "当前未开始生产商品,请手动去京东APP->游戏与互动->查看更多->京喜工厂 开启活动"
-                                    // $.msg($.name, '【提示】', `京东账号${$.index}[${$.nickName}]京喜工厂活动未开始\n请手动去京东APP->游戏与互动->查看更多->京喜工厂 开启活动`);
+                                        // $.msg($.name, '【提示】', `京东账号${$.index}[${$.nickName}]京喜工厂活动未开始\n请手动去京东APP->游戏与互动->查看更多->京喜工厂 开启活动`);
                                 } else if (data.factoryList && !data.productionList) {
                                     infoMsg = "当前未开始生产商品,请手动去京东APP->游戏与互动->查看更多->京喜工厂 开启活动"
                                 }
@@ -788,7 +788,7 @@ async function getDdFactoryInfo() {
     // 当心仪的商品存在，并且收集起来的电量满足当前商品所需，就投入
     let infoMsg = "";
     return new Promise(resolve => {
-        $.post(ddFactoryTaskUrl('jdfactory_getHomeData'), async (err, resp, data) => {
+        $.post(ddFactoryTaskUrl('jdfactory_getHomeData'), async(err, resp, data) => {
             try {
                 if (err) {
                     $.ddFactoryInfo = "获取失败!"
@@ -885,7 +885,7 @@ function getGetRequest(type, url) {
 }
 
 
-Date.prototype.Format = function (fmt) {
+Date.prototype.Format = function(fmt) {
     var e,
         n = this,
         d = fmt,
@@ -1052,7 +1052,7 @@ function Env(t, e) {
         getjson(t, e) {
             let s = e;
             const i = this.getdata(t);
-            if (i) try { s = JSON.parse(this.getdata(t)) } catch { }
+            if (i) try { s = JSON.parse(this.getdata(t)) } catch {}
             return s
         }
         setjson(t, e) { try { return this.setdata(JSON.stringify(t), e) } catch { return !1 } }
@@ -1124,8 +1124,8 @@ function Env(t, e) {
         getval(t) { return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null }
         setval(t, e) { return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null }
         initGotEnv(t) { this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar)) }
-        get(t, e = (() => { })) {
-            t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.get(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => {
+        get(t, e = (() => {})) {
+            t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.get(t, (t, s, i) => {!t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => {
                 const { statusCode: s, statusCode: i, headers: r, body: o } = t;
                 e(null, { status: s, statusCode: i, headers: r, body: o }, o)
             }, t => e(t))) : this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
@@ -1143,8 +1143,8 @@ function Env(t, e) {
                 e(s, i, i && i.body)
             }))
         }
-        post(t, e = (() => { })) {
-            if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.post(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) });
+        post(t, e = (() => {})) {
+            if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.post(t, (t, s, i) => {!t && s && (s.body = i, s.statusCode = s.status), e(t, s, i) });
             else if (this.isQuanX()) t.method = "POST", this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => {
                 const { statusCode: s, statusCode: i, headers: r, body: o } = t;
                 e(null, { status: s, statusCode: i, headers: r, body: o }, o)
