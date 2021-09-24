@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">关键字</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="Key" name="Key" autocomplete="off" class="layui-input">
+                                </div>
+                                <label class="layui-form-label">青龙面板</label>
+                                <div class="layui-input-inline">
+                                    <select id="ContainerId" name="ContainerId">
+                                        <option value="">全部</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="Sync"> Cookie同步 </button>
+                </div>
+            </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+            </script>
+        </div>
+    </div>
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js"></script>
+    <script>
+        layui.use(['form', 'table', 'common'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                common = layui.common,
+                table = layui.table;
+            function initTable() {
+                common.ajax("/JDCookie", "get", { Key: $("#Key").val(), ContainerId: $("#ContainerId").val() }, function (data) {
+                    table.render({
+                        elem: '#currentTableId',
+                        toolbar: '#toolbarDemo',
+                        defaultToolbar: ['filter', 'exports', 'print', {
+                            title: '提示',
+                            layEvent: 'LAYTABLE_TIPS',
+                            icon: 'layui-icon-tips'
+                        }],
+                        cols: [[
+                            { type: "checkbox", width: 50 },
+                            { field: 'ContainerName', width: 120, title: '青龙容器', sort: true },
+                            { field: 'PTPin', title: 'PTPin' },
+                            {
+                                field: 'QQ', title: 'QQ', sort: true, templet(d) {
+                                    if (d.QQ > 0) {
+                                        return d.QQ;
+                                    }
+                                    return "未绑定";
+                                }
+                            },
+                            {
+                                field: 'Priority', title: '权重', sort: true,
+                                width: 80
+                            },
+                            { field: 'nickname', title: '昵称' },
+                            {
+                                field: 'beanNum', title: '京豆', sort: true,
+                                width: 90
+                            },
+                            {
+                                field: 'Available', title: '可用', sort: true, templet(d) {
+                                    return d.Available ? "是" : "否";
+                                },
+                                width: 80
+                            },
+                            { field: 'levelName', title: '账号等级', sort: true },
+                            { field: 'CreateTime', title: '添加时间' },
+                            {
+                                field: 'Top', title: '置顶', sort: true, templet(d) {
+                                    return `<a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="top">${d.Top ? "取消" : "置顶"}</a>`
+                                },
+                                width: 80
+                            },
+                            { title: '操作', minWidth: 120, toolbar: '#currentTableBar', align: "center" }
+                        ]],
+                        limits: [10, 15, 20, 25, 50, 100],
+                        limit: 20,
+                        page: true,
+                        skin: 'line',
+                        data: data,
+                        size: "lg"
+                    });
+                });
+            }
+            initTable();
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                initTable();
+                return false;
+            });
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
+            common.ajax(`/QLConfig`, "get", {}, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#ContainerId").append("<option value='" + data[i].Id + "'>" + data[i].Name + "</option>");
+                }
+                form.render();
+            });
+
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                if (obj.event === 'Sync') {  // 监听添加操作
+                    layer.confirm('确定重新同步Cookie信息吗？', function (index) {
+                        common.ajax(`/JDCookie/Sync`, "get", {}, function (data) {
+                            layer.msg("同步操作成功，请稍后刷新账号查看！", { icon: 6 });
+                        });
+                    });
+                }
+            });
+
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    var index = layer.open({
+                        title: '编辑Cookie',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['50%', '45%'],
+                        content: 'jdCookie-add.html?id=' + data.Id,
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                    return false;
+                } else if (obj.event === 'delete') {
+                    layer.confirm('真的删除行么', function (index) {
+                        common.ajax(`/JDCookie/` + data.Id, "delete", {}, function (data) {
+                            layer.msg("删除成功！", { icon: 6 }, function () {
+                                obj.del();
+                                layer.close(index);
+                            });
+                        });
+                    });
+                } else if (obj.event === 'top') {
+                    layer.confirm('真的要置顶吗？指定后所有容器中都会包含这个Cookie。', function (index) {
+                        common.ajax(`/JDCookie/top/${data.Id}/${!data.Top}`, "get", {}, function (data111) {
+                            var message = "置顶成功，开卡无忧！";
+                            if (data.Top) {
+                                message = "取消置顶完成！"
+                            }
+                            layer.msg(message + "若需生效，请同步Cookie操作。", { icon: 6 });
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
