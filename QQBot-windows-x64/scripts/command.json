@@ -4,10 +4,6 @@
     "Script": "jd_bean_change"
   },
   {
-    "Key": "查询Test",
-    "Script": "jd_bean_change_Test"
-  },
-  {
     "Key": "月度查询",
     "Script": "jd_bean_change_month"
   },

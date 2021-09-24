@@ -1,7 +1,7 @@
 const $ = new Env('京东账户查询');
 let ReturnMessage = '';
 var cookiesArr = ['pt_key=AAJhNdqHADC-BdZecmtYSfuJGB-WdCAQgbWKkgHfdnwbrIa4KNg3_WbZ-2atIl3FRr3rHSul7Zk;pt_pin=jd_aDlznDhaQHRc;'];
-cookiesArr = ['{JD_COOKIE}'];
+//cookiesArr = ['{JD_COOKIE}'];
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 !(async () => {
@@ -348,10 +348,10 @@ function redPacket() {
                         $.balance = data.balance
                         $.expiredBalance = ($.jxRedExpire + $.jsRedExpire + $.jdRedExpire).toFixed(2)
                         $.message += `\n当前红包：${$.balance}(今日过期${$.expiredBalance})元 🧧
-京喜红包：${$.jxRed}(今日过期${$.jxRedExpire})元 🧧
-极速红包：${$.jsRed}(今日过期${$.jsRedExpire})元 🧧
-京东红包：${$.jdRed}(今日过期${$.jdRedExpire})元 🧧
-健康红包：${$.jdhRed}(今日过期${$.jdhRedExpire})元 🧧`;
+京喜红包：${$.jxRed}(今日过期${$.jxRedExpire.toFixed(2)})元 🧧
+极速红包：${$.jsRed}(今日过期${$.jsRedExpire.toFixed(2)})元 🧧
+京东红包：${$.jdRed}(今日过期${$.jdRedExpire.toFixed(2)})元 🧧
+健康红包：${$.jdhRed}(今日过期${$.jdhRedExpire.toFixed(2)})元 🧧`;
                     } else {
                         console.log(`京东服务器返回空数据`)
                     }

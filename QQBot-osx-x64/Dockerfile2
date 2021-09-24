@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 5010
+FROM base AS final
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
+    echo "deb http://mirrors.163.com/debian/ buster main non-free contrib" >/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.163.com/debian/ buster main non-free contrib" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.163.com/debian-security buster/updates main" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.163.com/debian-security buster/updates main" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.163.com/debian/ buster-updates main non-free contrib" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.163.com/debian/ buster-updates main non-free contrib" >>/etc/apt/sources.list && \
+    echo "deb http://mirrors.163.com/debian/ buster-backports main non-free contrib" >>/etc/apt/sources.list && \
+    echo "deb-src http://mirrors.163.com/debian/ buster-backports main non-free contrib" >>/etc/apt/sources.list
+	
+RUN apt-get update && apt-get install -y nodejs
+RUN apt-get update && apt-get install -y git
+
+COPY linux-x64/ /app
+
+ENTRYPOINT ["dotnet", "QQBot.Web.dll"]

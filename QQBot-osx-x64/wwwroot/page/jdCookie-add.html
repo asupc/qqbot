@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body { background-color: #ffffff; }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">QQ</label>
+            <div class="layui-input-block">
+                <input type="text" id="QQ" name="QQ" class="layui-input">
+                <input type="hidden" id="Id" name="Id">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权重</label>
+            <div class="layui-input-block">
+                <input type="number" id="Priority" name="Priority" lay-reqtext="请输入权重" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">
+                    数字越大，Cookie越靠前
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">备注</label>
+            <div class="layui-input-block">
+                <input type="text" id="Remark" name="Remark" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js"></script>
+
+    <script>
+        layui.use(['form', "common"], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                common = layui.common,
+                $ = layui.$;
+
+            var id = common.queryString("id");
+            if (id) {
+                common.ajax("/JDCookie/" + id, "get", {}, function (data) {
+                    if (data) {
+                        $("#Priority").val(data.Priority);
+                        $("#Remark").val(data.Remark);
+                        $("#QQ").val(data.QQ);
+                        $("#Id").val(data.Id);
+                    }
+                });
+            }
+            //if (common.ge)
+
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                if (data.field.Weigth < 1) {
+                    layer.msg("权重值必须大于0", { icon: 5 });
+                }
+                common.ajax("/JDCookie", "post", data.field, function (data) {
+                    var index = layer.msg("Cookie信息提交成功！", function (data) {
+                        parent.document.location.reload();
+
+                    })
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

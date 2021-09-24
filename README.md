@@ -1,5 +1,7 @@
 
-## 已提供，linux-armx64 ，linux-x64，windows-x64，windows x64 linux x64 测试正常，arm架构请自行测试。打包文件包含.net core 3.1 运行环境。linux 系统 ./QQBot.Web 直接运行。windows 直接双击QQBot.Web.exe 运行。
+## 已提供linux-armx64 ，linux-x64，windows-x64，osx 版本
+## windows x64 linux x64 测试正常，arm架构请自行测试。
+## 打包文件包含.net core 3.1 运行环境。linux 系统 ./QQBot.Web 直接运行。windows 直接双击QQBot.Web.exe 运行。
 
 ### 一般docker用户参考 docker-compose.yaml
 ### 群晖用户参考 asupc-qqbot.json
