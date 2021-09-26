@@ -60,17 +60,17 @@
    "volume_bindings" : [
       {
          "host_volume_file" : "/docker/qqbot/logs",
-         "mount_point" : "/app/logs",
+         "mount_point" : "/app/linux-x64/logs",
          "type" : "rw"
       },
       {
          "host_volume_file" : "/docker/qqbot/db",
-         "mount_point" : "/app/db",
+         "mount_point" : "/app/linux-x64/db",
          "type" : "rw"
       },
       {
          "host_volume_file" : "/docker/qqbot/config",
-         "mount_point" : "/app/config",
+         "mount_point" : "/app/linux-x64/config",
          "type" : "rw"
       }
    ]

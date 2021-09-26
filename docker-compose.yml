@@ -8,6 +8,6 @@ services:
     ports:
       - 5010:5010
     volumes:
-      - ./config:/app/config
-      - ./db:/app/db
-      - ./logs:/app/logs
+      - ./config:/app/linux-x64/config
+      - ./db:/app/linux-x64/db
+      - ./logs:/app/linux-x64/logs
