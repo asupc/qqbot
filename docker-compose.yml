@@ -11,3 +11,4 @@ services:
       - ./config:/app/linux-x64/config
       - ./db:/app/linux-x64/db
       - ./logs:/app/linux-x64/logs
+      - ./scripts:/app/linux-x64/scripts
