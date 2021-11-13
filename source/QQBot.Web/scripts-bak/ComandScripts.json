@@ -1,0 +1,49 @@
+[
+  {
+    "Command": "查询", //指令
+    "FileName": "qqbot_jd_bean_change.js", //脚本文件
+    "Name": "日资产查询", //任务名称
+    "EnableConc": false, // 是否开启并发
+    "Enable": true, // 是否启用
+    "MaxCount": 3, // 当日最大使用次数
+    "EnablePush": true //是否开启推送
+  },
+  {
+    "Command": "月度查询",
+    "FileName": "qqbot_jd_month_bean_change.js",
+    "Name": "月度查询",
+    "EnableConc": false,
+    "Enable": true,
+    "MaxCount": 3,
+    "EnablePush": true
+  },
+  {
+    "Command": "活动进度",
+    "FileName": "qqbot_huodong.js",
+    "Name": "活动进度",
+    "EnableConc": false,
+    "Enable": true,
+    "MaxCount": 3,
+    "EnablePush": true
+  },
+  {
+    "Command": "活动领取",
+    "FileName": "qqbot_huodonglingqu.js",
+    "Name": "活动领取",
+    "EnableConc": false,
+    "Enable": true,
+    "MaxCount": 3,
+    "EnablePush": true,
+    "Cron": "0 0 12,18 * * ?"
+  },
+  {
+    "Command": "检查账号",
+    "FileName": "qqbot_checkCookie.js",
+    "Name": "账号有效检查",
+    "EnableConc": false,
+    "Enable": true,
+    "MaxCount": 3,
+    "EnablePush": true,
+    "Cron": "0 0 0-23/2 * * ?"
+  }
+]

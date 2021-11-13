@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+    <style>
+        .alert-question { color: brown; font-size: 16px; }
+        .alert-answer { padding: 5px; }
+        #System-Config { padding: 15px; }
+    </style>
+</head>
+<body>
+    <div id="System-Config">
+        <alert show-icon>
+            <template slot="desc">
+                系统指令自定义口令
+                <p style="color:red">
+                    多个口令用英文逗号隔开。比如，手机号登录指令填：手机号登陆,短信登录，则支持手机号登陆和短信登录触发指令。
+                </p>
+            </template>
+        </alert>
+        <i-form :label-width="100" style="padding: 0 20px">
+
+            <Divider plain>用户指令定义配置</Divider>
+            <form-item :label="item.Key" v-for="item in Commands.filter((t)=>!t.IsManager)">
+                <i-input type="text" v-model="item.Command">
+                </i-input>
+            </form-item>
+
+            <Divider plain>管理员指令定义配置</Divider>
+            <form-item :label="item.Key" v-for="item in Commands.filter((t)=>t.IsManager)">
+                <i-input type="text" v-model="item.Command">
+                </i-input>
+            </form-item>
+
+            <form-item>
+                <i-button type="primary" @click="handleSubmit" style="float:right">保存</i-button>
+            </form-item>
+        </i-form>
+    </div>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+    <script>
+        var systemConfigApp = new Vue({
+            el: '#System-Config',
+            data: {
+                Commands: []
+            },
+            methods: {
+                handleSubmit(name) {
+                    this.$Modal.confirm({
+                        title: '提交确认',
+                        content: '确定提交修改的配置信息吗？',
+                        okText: '确定',
+                        cancelText: '取消',
+                        onOk: () => {
+                            axios.post('/api/SystemConfig/commands', systemConfigApp.Commands)
+                                .then(function (response) {
+                                    systemConfigApp.$Notice.success({
+                                        desc: "更新配置信息成功！"
+                                    });
+                                })
+                                .catch(function (error) {
+                                    systemConfigApp.$Notice.error({
+                                        desc: error
+                                    });
+                                });
+                        }
+                    });
+                },
+                getSystemConfig() {
+                    axios.get("/api/SystemConfig/commands").then(function (response) {
+                        systemConfigApp.Commands = response;
+                    });
+                }
+            },
+            mounted() {
+                this.getSystemConfig();
+
+            }
+        });
+    </script>
+</body>
+</html>

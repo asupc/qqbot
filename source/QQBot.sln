@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.Web", "QQBot.Web\QQBot.Web.csproj", "{5AFAB52A-7974-435E-9F05-67973C68B4D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.Entities", "QQBot.Entities\QQBot.Entities.csproj", "{24B4B1A6-EAC1-4101-84E1-6627137D99FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.Utils", "QQBot.Utils\QQBot.Utils.csproj", "{529A467E-CEC8-4EDB-B774-7EA874A5B600}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.DB", "QQBot.DB\QQBot.DB.csproj", "{8CBCEB77-F558-421F-B87B-81E1D274F158}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.Job", "QQBot.Job\QQBot.Job.csproj", "{5A65FA09-204D-4297-B950-FDF72AA93A17}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.Docker", "QQBot.Docker\QQBot.Docker.csproj", "{265AE0B2-8397-43E8-89D0-8F270DFD0AB2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBot.Application", "QQBot.Application\QQBot.Application.csproj", "{3E2E9D37-FF90-4219-8AB0-7B08FFE2BAC1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AFAB52A-7974-435E-9F05-67973C68B4D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFAB52A-7974-435E-9F05-67973C68B4D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AFAB52A-7974-435E-9F05-67973C68B4D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AFAB52A-7974-435E-9F05-67973C68B4D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24B4B1A6-EAC1-4101-84E1-6627137D99FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24B4B1A6-EAC1-4101-84E1-6627137D99FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24B4B1A6-EAC1-4101-84E1-6627137D99FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24B4B1A6-EAC1-4101-84E1-6627137D99FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{529A467E-CEC8-4EDB-B774-7EA874A5B600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{529A467E-CEC8-4EDB-B774-7EA874A5B600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{529A467E-CEC8-4EDB-B774-7EA874A5B600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{529A467E-CEC8-4EDB-B774-7EA874A5B600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CBCEB77-F558-421F-B87B-81E1D274F158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CBCEB77-F558-421F-B87B-81E1D274F158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CBCEB77-F558-421F-B87B-81E1D274F158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CBCEB77-F558-421F-B87B-81E1D274F158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A65FA09-204D-4297-B950-FDF72AA93A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A65FA09-204D-4297-B950-FDF72AA93A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A65FA09-204D-4297-B950-FDF72AA93A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A65FA09-204D-4297-B950-FDF72AA93A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265AE0B2-8397-43E8-89D0-8F270DFD0AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{265AE0B2-8397-43E8-89D0-8F270DFD0AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265AE0B2-8397-43E8-89D0-8F270DFD0AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{265AE0B2-8397-43E8-89D0-8F270DFD0AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E2E9D37-FF90-4219-8AB0-7B08FFE2BAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E2E9D37-FF90-4219-8AB0-7B08FFE2BAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E2E9D37-FF90-4219-8AB0-7B08FFE2BAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E2E9D37-FF90-4219-8AB0-7B08FFE2BAC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4AD91903-8380-4095-8DE1-C5B2424647D6}
+	EndGlobalSection
+EndGlobal

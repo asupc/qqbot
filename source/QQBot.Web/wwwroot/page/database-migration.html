@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+    <style>
+        body { background-color: #ffffff; }
+
+        .alert-question { color: brown; font-size: 16px; }
+
+        .alert-answer { padding: 5px; }
+
+        .demo-spin-icon-load { animation: ani-demo-spin 1s linear infinite; }
+
+        @keyframes ani-demo-spin {
+            from { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .demo-spin-col { height: 100px; position: relative; border: 1px solid #eee; }
+    </style>
+</head>
+
+<body>
+    <div id="Migration-FormData">
+        <alert type="warning" show-icon>
+            <p style="color:red"> 该功能为QQBot数据库迁移工具，如果跨版本升级，或确定是数据库问题时可使用该功能进行数据库数据迁移。请认真阅读以下迁移说明！！</p>
+            <p style="color:red"> 该功能为QQBot数据库迁移工具，如果跨版本升级，或确定是数据库问题时可使用该功能进行数据库数据迁移。请认真阅读以下迁移说明！！</p>
+            <p style="color:red"> 该功能为QQBot数据库迁移工具，如果跨版本升级，或确定是数据库问题时可使用该功能进行数据库数据迁移。请认真阅读以下迁移说明！！</p>
+            <template slot="desc">
+                <p class="alert-question">1. 为什么需要迁移？</p>
+                <p class="alert-answer">QQBot为个人开发者闲余时间开发，在初期设计不合理，考虑不周到的情况下，为了使开发，易用性提升不得不做出数据库结构变化的决定，这样导致有些版本会修改数据库接口且无法完整自动迁移。</p>
+                <p class="alert-question">2. QQBot是如何完成迁移工作的？</p>
+                <p class="alert-answer">
+                    第一步：系统自动生成新的数据库。<br />
+                    第二步：将原来数据库中的重要数据提取出来写入新的数据库。<br />
+                    第三步：自动修改数据库配置文件。<br />
+                </p>
+                <p class="alert-question">3. SQLite 和 MySQL可以相互迁移吗？</p>
+                <p class="alert-answer">
+                    可以，支持从MySQL迁移到SQLite 或者SQLite 迁移到MySQL
+                </p>
+                <p class="alert-question">4. 如何配置迁移？</p>
+                <p class="alert-answer">
+                    1. 数据库类型按需选择。<br />
+                    2. 填入数据库地址。SQLite原数据库地址为：QQBot.db , 新数据库地址则可以修改成QQBot2.db。 新旧数据库地址不能一样。且保证db文件夹中不能有这个文件。<br />
+                    如需要迁移到MySQL 那么则填写MYSQL 数据库连接如:server=192.168.2.2;port=3306;database=QQBot2;Uid=root;Pwd=123456;CharSet=utf8; 新的数据库名称不能存在于数据库服务器中。
+                </p>
+            </template>
+        </alert>
+        <i-form @submit.native.prevent autocomplete="off" ref="MigrationFormData" :model="MigrationFormData" style=" padding:25px;" :label-width="120" :rules="ruleInline">
+            <form-item label="原数据库类型">
+                <radio-group disabled v-model="Config.DBType">
+                    <radio disabled label="SQLite">SQLite</radio>
+                    <radio disabled label="MySQL">MySQL</radio>
+                </radio-group>
+            </form-item>
+            <form-item label="原数据库地址">
+                <i-input disabled type="text" name="DBAddress" v-model="Config.DBAddress">
+                </i-input>
+            </form-item>
+            <form-item label="新数据库类型">
+                <radio-group v-model="MigrationFormData.DBType">
+                    <radio label="SQLite">SQLite</radio>
+                    <radio label="MySQL">MySQL</radio>
+                </radio-group>
+            </form-item>
+            <form-item label="新数据库地址" prop="DBAddress">
+                <i-input type="text" name="DBAddress" v-model="MigrationFormData.DBAddress">
+                </i-input>
+            </form-item>
+            <form-item>
+                <i-button type="primary" @click="handleSubmit('MigrationFormData')" style="float:right">保存</i-button>
+            </form-item>
+        </i-form>
+
+        <Spin size="large" fix v-if="spinShow">
+            <Icon type="ios-loading" size=18 class="demo-spin-icon-load">{{spinText}}</Icon>
+        </Spin>
+    </div>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+    <script>
+        var dataMigration = new Vue({
+            el: '#Migration-FormData',
+            data: {
+                MigrationFormData: {},
+                Config: {
+                    DBAddress: "",
+                    DBType: ""
+                },
+                UploadHeaders: {
+                    DBAddress: "",
+                    DBType: ""
+                },
+                ruleInline: {
+                    DBAddress: [{
+                        required: true,
+                        message: '新的数据库地址不能为空！',
+                        trigger: 'blur'
+                    }]
+
+                },
+                spinShow: false,
+                spinText: "数据迁移中..."
+            },
+            methods: {
+                getSystemConfig() {
+
+                    axios.get('/api/SystemConfig')
+                        .then(function (response) {
+                            dataMigration.Config = JSON.parse(JSON.stringify(response));
+                            dataMigration.MigrationFormData = JSON.parse(JSON.stringify(response));
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                handleSubmit(name) {
+                    this.$refs[name].validate((valid) => {
+                        if (this.MigrationFormData.DBAddress == this.Config.DBAddress) {
+                            this.$Notice.error({
+                                title: '配置错误',
+                                desc: '新的数据库地址不能和原数据库地址一样！'
+                            });
+                            return false;
+                        }
+                        if (valid) {
+                            this.$Modal.confirm({
+                                title: '迁移确认',
+                                content: '确定按此配置进行数据迁移吗？配置错误将迁移失败，迁移中可能出现部分数据丢失。',
+                                okText: '确定',
+                                cancelText: '取消',
+                                onOk: () => {
+                                    axios.post('/api/DataMigration', this.MigrationFormData)
+                                        .then(function (response) {
+                                            dataMigration.$Modal.success({
+                                                title: "迁移成功",
+                                                content: response
+                                            });
+                                        })
+                                        .catch(function (error) {
+                                            dataMigration.$Notice.error({
+                                                title: '配置错误',
+                                                desc: error
+                                            });
+                                            return false;
+                                        });
+                                }
+                            });
+                        }
+                    })
+                    return false;
+                }
+            },
+            mounted() {
+                this.getSystemConfig();
+            }
+        });
+    </script>
+</body>
+</html>

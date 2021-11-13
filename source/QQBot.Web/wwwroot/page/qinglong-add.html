@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body { background-color: #ffffff; }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <blockquote class="layui-elem-quote">
+            请打开青龙面板，系统设置>应用设置 添加一个应用，权限全选。
+        </blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">面板名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="Name" name="Name" lay-verify="required" placeholder="请输入面板别名" lay-reqtext="面板名称不能为空" value="" class="layui-input">
+                <input type="hidden" id="Id" name="Id">
+                <input type="hidden" id="EnableAll" name="EnableAll" value="false">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">面板地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="Address" name="Address" lay-verify="required" lay-reqtext="面板登录地址不能为空" value="" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">
+                    面板地址填写示例：http://192.168.2.199:5700
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">Client ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="ClientID" name="ClientID" lay-verify="required" lay-reqtext="Client ID不能为空" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">Client Secret</label>
+            <div class="layui-input-block">
+                <input type="text" id="ClientSecret" name="ClientSecret" lay-verify="required" lay-reqtext="ClientSecret不能为空" value="" class="layui-input">
+            </div>
+        </div>
+        <!--<div class="layui-form-item">
+            <label class="layui-form-label ">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" id="UserName" name="UserName" class="layui-input">
+            </div>
+        </div><div class="layui-form-item">
+            <label class="layui-form-label ">密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="PassWord" name="PassWord" class="layui-input">
+            </div>
+        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label required">最大容量</label>
+            <div class="layui-input-block">
+                <input type="number" id="MaxCount" lay-verify="required" placeholder="分配的Cookie大于这个值后不再分配" lay-reqtext="请输入最大容量" name="MaxCount" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">权重</label>
+            <div class="layui-input-block">
+                <input type="number" id="Weigth" name="Weigth" lay-verify="required" lay-reqtext="请输入权重" value="1" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">
+                    权重数字越大，分配到的Cookie越多，如不想分配Cookie请填0。
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">全量模式</label>
+            <div class="layui-input-block">
+                <input type="checkbox" lay-skin="switch" lay-filter="EnableAll" lay-text="是|否">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                开启全量模式权重值不生效，该容器将拥有所有的Cookie。
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js"></script>
+
+    <script>
+        layui.use(['form', "common"], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                common = layui.common,
+                $ = layui.$;
+
+            var id = common.queryString("id");
+            if (id) {
+                common.ajax("/QLPanel/" + id, "get", {}, function (data) {
+                    if (data) {
+                        $("#UserName").val(data.UserName);
+                        $("#Name").val(data.Name);
+                        $("#Address").val(data.Address);
+                        $("#Id").val(data.Id);
+                        $("#PassWord").val(data.PassWord);
+                        $("#MaxCount").val(data.MaxCount);
+                        $("#Weigth").val(data.Weigth);
+                        $("#ClientID").val(data.ClientID);
+                        $("#ClientSecret").val(data.ClientSecret);
+                        if (data.EnableAll) {
+                            $("#EnableAll").val(true);
+                            var node = $(`input[type="checkbox"][lay-filter^="EnableAll"]`);
+                            node[0].checked = true;
+                            form.render();
+                        }
+                    }
+                });
+            }
+            form.on('switch(EnableAll)', function (data) {
+                $("#EnableAll").val(this.checked);
+            });
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                if (data.field.Weigth < 1) {
+                    layer.msg("权重值必须大于0", { icon: 5 });
+                }
+                if (data.field.MaxCount < 0) {
+                    layer.msg("容器最大容量必须大于等于0。", { icon: 5 });
+                }
+                common.ajax("/QLPanel", "post", JSON.stringify(data.field), function (data) {
+                    parent.layer.closeAll();
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

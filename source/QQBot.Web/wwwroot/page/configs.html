@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+    <link rel="stylesheet"
+          data-name="vs/editor/editor.main"
+          href="../monaco-editor/min/vs/editor/editor.main.css" />
+    <style>
+        #container { width: 100%; height: calc(100% - 90px); margin-top: 20px; }
+        html, body, #QL-Configs { height: 100%; }
+        /*header{padding:20px}*/
+        #QL-Configs { padding: 20px; }
+        footer { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="QL-Configs">
+        <header>
+            <Breadcrumb>
+                <Breadcrumb-Item>青龙配置文件编辑</Breadcrumb-Item>
+                <Breadcrumb-Item>
+                    <i-select @on-change="changeSelectQL" filterable v-model="SelectQLId" style="width:200px">
+                        <i-option v-for="item in QLs" :value="item.Id" :key="item.value">{{ item.Name }}</i-option>
+                    </i-select>
+                </Breadcrumb-Item>
+                <Breadcrumb-Item>
+                    <i-select @on-change="changeFile" filterable v-model="SelectFileName" style="width:200px">
+                        <i-option v-for="item in Files" :value="item.value" :key="item.value">{{ item.title }}</i-option>
+                    </i-select>
+                </Breadcrumb-Item>
+            </Breadcrumb>
+
+        </header>
+        <div id="container"></div>
+        <footer>
+            <div style="float:left;margin-right:20px;">
+                容器同步
+            </div>
+            <div style="float:left">
+                <div style="float: left; margin-right: 15px; ">
+                    <input type="checkbox" id="EnableAll" v-model="SelectAllQL" @change="SelectAllQLChange">
+                    <label for="EnableAll">全选</label>
+                </div>
+                <div v-for="(data,i) in CheckQLs" style="float: left; margin-right: 15px;">
+                    <input type="checkbox" :id="'Enable'+i" v-model="data.Enable">
+                    <label :for="'Enable'+i">{{data.Name}}</label>
+                </div>
+            </div>
+            <i-button style="float:right" @click="saveFile" type="primary">保存</i-button>
+        </footer>
+    </div>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+
+    <script>
+        var require = { paths: { vs: '../monaco-editor/min/vs' } };
+    </script>
+    <script src="../monaco-editor/min/vs/loader.js"></script>
+    <script src="../monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="../monaco-editor/min/vs/editor/editor.main.js"></script>
+
+    <script>
+
+        var configs = new Vue({
+            el: '#QL-Configs',
+            data: {
+                QLs: [],
+                SelectQLId: "",
+                SelectFileName: "",
+                Files: "",
+                MonacoEditor: null,
+                Languages: {
+                    '.py': 'python',
+                    '.js': 'javascript',
+                    '.sh': 'shell',
+                    '.ts': 'typescript'
+                },
+                CheckQLs: [],
+                SelectAllQL: false
+            },
+            methods: {
+                getQLs() {
+                    axios.get('/api/QLPanel')
+                        .then(function (response) {
+                            configs.CheckQLs = [];
+                            for (var i = 0; i < response.length; i++) {
+                                configs.CheckQLs.push({
+                                    Id: response[i].Id,
+                                    Name: response[i].Name,
+                                    Enable: i == 0
+                                })
+                            }
+                            configs.QLs = response;
+                            configs.SelectQLId = response[0].Id;
+                            configs.getFiles();
+                        })
+                        .catch(function (error) {
+                            configs.$Notice.error({
+                                title: '请求错误',
+                                desc: error
+                            })
+                        });
+                },
+                getFiles() {
+                    axios.get('/api/QLConfig/' + this.SelectQLId)
+                        .then(function (response) {
+                            configs.Files = response;
+                            configs.SelectFileName = "config.sh";
+                            configs.getFile();
+                        })
+                        .catch(function (error) {
+                            configs.$Notice.error({
+                                title: '请求错误',
+                                desc: error
+                            })
+                        });
+                },
+                getFile() {
+                    axios.get('/api/QLConfig/' + this.SelectQLId + "/" + this.SelectFileName)
+                        .then(function (response) {
+                            configs.createEditor(response);
+                        })
+                        .catch(function (error) {
+                            configs.$Notice.error({
+                                title: '请求错误',
+                                desc: error
+                            })
+                        });
+                },
+                changeSelectQL() {
+                    this.updateCheckQLs();
+                    this.getFiles();
+                },
+                updateCheckQLs(all) {
+                    for (var i = 0; i < this.CheckQLs.length; i++) {
+                        this.CheckQLs[i].Enable = all ? all : this.SelectQLId == this.CheckQLs[i].Id;
+                    }
+                },
+                SelectAllQLChange() {
+                    this.updateCheckQLs(this.SelectAllQL);
+                },
+                changeFile() {
+                    this.getFile();
+                },
+                createEditor(text) {
+                    this.MonacoEditor?.dispose();
+                    this.MonacoEditor = monaco.editor.create(document.getElementById('container'), {
+                        value: text,
+                        language: configs.getLanguage() ?? "shell"
+                    });
+                },
+                getLanguage() {
+                    var ss = this.SelectFileName.split(".");
+                    return (this.Languages["." + ss[ss.length - 1]]);
+                },
+                saveFile() {
+                    var QLIds = [];
+                    for (var i = 0; i < this.CheckQLs.length; i++) {
+                        if (this.CheckQLs[i].Enable) {
+                            QLIds.push(this.CheckQLs[i].Id);
+                        }
+                    }
+                    axios.post('/api/QLConfig/save', {
+                        name: this.SelectFileName,
+                        content: this.MonacoEditor.getValue(),
+                        QLIds: QLIds
+                    })
+                        .then(function (response) {
+                            configs.$Notice.success({
+                                desc: "修改青龙配置文件成功"
+                            })
+                        })
+                        .catch(function (error) {
+                            configs.$Notice.error({
+                                title: '请求错误',
+                                desc: error
+                            })
+                        });
+                }
+            },
+            mounted() {
+                this.getQLs();
+                //this.createEditor();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+    <style>
+        body { background-color: #ffffff; padding: 20px; }
+        #container { width: 100%; height: calc(100% - 90px); }
+        html, body, #QLTask-Logs { height: 100%; }
+        header { position: fixed; top: 0; left: 0; width: 100%; background-color: #ffffff; padding:10px; }
+    </style>
+</head>
+<body>
+    <div id="QLTask-Logs">
+        <header>
+            <Tabs @on-click="changeSelectQL" v-model="SelectQLId">
+                <Tab-Pane v-for="item in QLTasks" :label="item.QLName" :name="item.QLId">
+                    <!-- {{item.QLName+"运行日志（每3秒自动刷新一次）"}} -->
+                </Tab-Pane>
+            </Tabs>
+        </header>
+        <pre id="container">{{LogContent}}</pre>
+    </div>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+</body>
+</html>
+<script>
+    var app2 = new Vue({
+        el: '#QLTask-Logs',
+        data: {
+            QLTasks: [],
+            SelectQLId: "",
+            LogContent: "",
+            ScriptId: ""
+        },
+        methods: {
+            changeSelectQL() {
+                this.ScriptId = this.QLTasks.filter(n => n.QLId == this.SelectQLId)[0]._id
+                this.getLog();
+            },
+            getLog() {
+                axios.get('/api/QLTask/log/' + this.SelectQLId + "/" + this.ScriptId)
+                    .then(function (response) {
+                        app2.LogContent = response;
+                    })
+                    .catch(function (error) {
+                        app2.$Notice.error({
+                            title: '请求错误',
+                            desc: error
+                        })
+                    });
+            }
+        },
+        mounted() {
+            var update = JSON.parse(localStorage.getItem("UpdateQLTask")).UpdateQLTask;
+            this.QLTasks = update.QLTasks;
+            console.log(this.QLTasks)
+            this.SelectQLId = this.QLTasks[0].QLId;
+            this.changeSelectQL();
+            setInterval(function () { app2.getLog(); }, 3000)
+        }
+    });
+</script>

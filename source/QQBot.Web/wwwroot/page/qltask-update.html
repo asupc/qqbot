@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+    <style>
+        body { background-color: #ffffff; }
+    </style>
+</head>
+
+<body>
+    <i-form ref="UpdateQLTask" id="Update-QLTask" :model="UpdateQLTask" style=" padding:25px;" :label-width="100" :rules="ruleInline">
+        <Divider>任务基础配置</Divider>
+        <form-item label="任务名称" prop="name">
+            <i-input type="text" name="name" v-model="UpdateQLTask.name">
+            </i-input>
+        </form-item>
+        <form-item label="任务命令" prop="command">
+            <i-input type="text" name="command" v-model="UpdateQLTask.command">
+            </i-input>
+        </form-item>
+        <form-item label="定时调度">
+            <i-input type="text" name="schedule" placeholder="不会填的参考青龙，填错了无法提交到青龙。" v-model="UpdateQLTask.schedule">
+                <span slot="append">
+                    <i-button @click="syncSchedule" title="修改所有容器的定时调度规则">同步</i-button>
+                </span>
+            </i-input>
+        </form-item>
+        <Divider>青龙容器详细配置</Divider>
+        <form-item :label="data.QLName" v-for="(data,i) in UpdateQLTask.QLTasks">
+            <i-input type="text" placeholder="不填定时执行表达式则默认使用基础配置" name="schedule" v-model="data.schedule">
+                <span slot="prepend">调度表达式</span>
+                <span slot="append">
+                    <input type="checkbox" :id="'isDisable'+i" v-model="!data.isDisable">
+                    <label :for="'isDisable'+i">启用</label>
+                </span>
+            </i-input>
+        </form-item>
+        <form-item>
+            <i-button type="primary" @click="handleSubmit('UpdateQLTask')" style="float:right">保存</i-button>
+        </form-item>
+    </i-form>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+</body>
+
+</html>
+<script>
+    var app2 = new Vue({
+        el: '#Update-QLTask',
+        data: {
+            UpdateQLTask: {},
+            ruleInline: {
+                name: [{
+                    required: true,
+                    message: '任务名称不能为空',
+                    trigger: 'blur'
+                }],
+                command: [{
+                    required: true,
+                    message: '任务命令不能为空',
+                    trigger: 'blur'
+                }]
+            }
+        },
+        methods: {
+            syncSchedule() {
+                for (var i = 0; i < this.UpdateQLTask.QLTasks.length; i++) {
+                    this.UpdateQLTask.QLTasks[i].schedule = this.UpdateQLTask.schedule;
+                }
+            },
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    for (var i = 0; i < this.UpdateQLTask.QLTasks.length; i++) {
+                        var cron = this.UpdateQLTask.QLTasks[i].schedule;
+                        if (!cron) {
+                            this.UpdateQLTask.QLTasks[i].schedule = this.UpdateQLTask.schedule;
+                        }
+                    }
+                    if (valid) {
+                        this.$Modal.confirm({
+                            title: '提交确认',
+                            content: '确定提交修改的任务信息吗？',
+                            okText: '确定',
+                            cancelText: '取消',
+                            onOk: () => {
+                                axios.put('/api/QLTask/update', this.UpdateQLTask)
+                                    .then(function (response) {
+                                        parent.layer.closeAll();
+                                    })
+                                    .catch(function (error) {
+                                        console.log(error);
+                                    });
+                            }
+                        });
+                    } else {
+                        this.$Notice.error({
+                            title: '表单验证失败',
+                            desc: '验证青龙任务信息失败，请检查配置后重新提交！'
+                        });
+                    }
+                })
+            }
+        },
+        mounted() {
+            var update = JSON.parse(localStorage.getItem("UpdateQLTask")).UpdateQLTask;
+            this.UpdateQLTask = update;
+        }
+    });
+</script>

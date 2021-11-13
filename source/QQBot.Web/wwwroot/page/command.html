@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                </div>
+            </script>
+
+            <table class="layui-hide" lay-size="lg" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-xs layui-btn-warm data-count-delete" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+            </script>
+
+        </div>
+    </div>
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js"></script>
+    <script>
+        layui.use(['form', 'table', 'common'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                common = layui.common,
+                table = layui.table;
+
+            var initTable = function () {
+                common.ajax("/Command", "get", {}, function (data) {
+                    table.render({
+                        elem: '#currentTableId',
+                        toolbar: '#toolbarDemo',
+                        defaultToolbar: ['filter', 'exports'],
+                        cols: [[
+                            { type: "checkbox", width: 50 },
+                            { field: 'Key', width: 120, title: '指令', sort: true },
+                            { field: 'Message', title: '回复内容' },
+                            { title: '操作', width: 120, toolbar: '#currentTableBar', align: "center" }
+                        ]],
+                        limits: [10, 15, 20, 25, 50, 100],
+                        limit: 15,
+                        page: true,
+                        skin: 'line',
+                        data: data,
+                        size: "lg"
+                    });
+                })
+            }
+            initTable();
+
+            /**
+             * toolbar监听事件
+             */
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                if (obj.event === 'add') {  // 监听添加操作
+                    addOrUpdate(obj, "添加")
+                } else if (obj.event === 'delete') {  // 监听删除操作
+                    var checkStatus = table.checkStatus('currentTableId')
+                        , data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                }
+            });
+
+            function addOrUpdate(obj, type) {
+                var index = layer.open({
+                    title: type + '快捷回复',
+                    type: 2,
+                    shade: 0.2,
+                    area: ['50%', '60%'],
+                    content: '../page/command-add.html?id=' + (type == "编辑" ? obj.data.Id : ""),
+                    end: initTable
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+            });
+
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'delete') {
+                    layer.confirm('真的要删除么吗？', function (index) {
+                        obj.del();
+                        common.ajax("/Command/" + data.Id, "delete", {}, function () {
+                            layer.msg("删除成功。", { icon: 6 });
+                            layer.close(index);
+                        })
+                    });
+                } else if (obj.event === 'edit') {
+                    addOrUpdate(obj, "编辑")
+                }
+            });
+        });
+    </script>
+</body>
+</html>

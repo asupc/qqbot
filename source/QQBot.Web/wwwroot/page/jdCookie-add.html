@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="edit-JDCookie">
+        <i-form ref="Edit-Form" id="Edit-Form" :model="EditCookie" style=" padding:25px;" :label-width="100">
+            <form-item label="容器指定">
+                <i-select multiple v-model="EditCookie.TQLPanelCookies">
+                    <i-option v-for="t in AllPanels" :value="t.QLPanelId">{{t.QLPanelName}}</i-option>
+                </i-select>
+            </form-item>
+            <form-item label="QQ" prop="QQ">
+                <i-input type="text" name="QQ" v-model="EditCookie.QQ">
+                </i-input>
+            </form-item>
+            <form-item label="权重" prop="Priority">
+                <i-input type="text" name="Priority" v-model="EditCookie.Priority">
+                </i-input>
+            </form-item>
+            <form-item label="备注">
+                <i-input type="textarea" name="Remark" v-model="EditCookie.Remark">
+                </i-input>
+            </form-item>
+            <form-item>
+                <i-button type="primary" @click="handleSubmit('Edit-Form')" style="float:right">保存</i-button>
+            </form-item>
+        </i-form>
+    </div>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+
+    <script>
+        var editCookie = new Vue({
+            el: "#Edit-Form",
+            data: {
+                EditCookie: {
+                    Id: null,
+                    QLPanelCookies: []
+                },
+                AllPanels: []
+            },
+            methods: {
+                getCookieById() {
+                    axios.get('/api/JDCookie/' + this.EditCookie.Id)
+                        .then(function(response) {
+                            editCookie.EditCookie = response;
+                            editCookie.EditCookie.TQLPanelCookies = [];
+                            for (var x = 0; x < editCookie.EditCookie.QLPanelCookies.length; x++) {
+                                editCookie.EditCookie.TQLPanelCookies.push(editCookie.EditCookie.QLPanelCookies[x].QLPanelId)
+                            }
+                        })
+                        .catch(function(error) {
+                            editCookie.$Notice.error({
+                                title: '请求错误',
+                                desc: error
+                            })
+                        });
+                },
+                queryString: function(name) {
+                    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+                    var r = window.location.search.substr(1).match(reg);
+                    if (r != null) {
+                        return unescape(r[2]);
+                    }
+                    return null;
+                },
+                getPanels() {
+                    axios.get('/api/QLPanel')
+                        .then(function(response) {
+                            for (var i = 0; i < response.length; i++) {
+                                if (!response[i].Enable) {
+                                    editCookie.AllPanels.push({
+                                        QLPanelId: response[i].Id,
+                                        QLPanelName: response[i].Name
+                                    });
+                                }
+                            }
+                            console.log(editCookie.AllPanels)
+                            editCookie.getCookieById();
+                        })
+                        .catch(function(error) {
+                            editCookie.$Notice.error({
+                                title: '请求错误',
+                                desc: error
+                            })
+                        });
+                },
+                handleSubmit(name) {
+                    this.$refs[name].validate((valid) => {
+                        if (valid) {
+                            this.EditCookie.QLPanelCookies = [];
+                            for (var x = 0; x < this.EditCookie.TQLPanelCookies.length; x++) {
+                                this.EditCookie.QLPanelCookies.push({
+                                    QLPanelId: editCookie.EditCookie.TQLPanelCookies[x],
+                                    Mode: 2
+                                });
+                            }
+                            this.$Modal.confirm({
+                                title: '提交确认',
+                                content: '确定提交修改的账号信息吗？',
+                                okText: '确定',
+                                cancelText: '取消',
+                                onOk: () => {
+                                    axios.put('/api/JDCookie', this.EditCookie)
+                                        .then(function(response) {
+                                            parent.layer.closeAll();
+                                        })
+                                        .catch(function(error) {
+                                            console.log(error);
+                                        });
+                                }
+                            });
+                        } else {
+                            this.$Notice.error({
+                                title: '表单验证失败',
+                                desc: '验证信息失败，请检查后重新提交！'
+                            });
+                        }
+                    })
+                }
+            },
+            mounted() {
+                this.EditCookie.Id = this.queryString("id");
+                this.getPanels();
+            }
+        });
+    </script>
+</body>
+
+</html>

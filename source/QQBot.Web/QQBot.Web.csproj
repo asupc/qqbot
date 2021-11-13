@@ -1,0 +1,217 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>14286d07-22d7-4cbe-8c77-b0ae3684bfee</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Utils\**" />
+    <EmbeddedResource Remove="wwwroot\bootstrap-3.4.1\**" />
+    <EmbeddedResource Remove="wwwroot\bootstrap-4.6.0\**" />
+    <None Remove="Utils\**" />
+    <None Remove="wwwroot\bootstrap-3.4.1\**" />
+    <None Remove="wwwroot\bootstrap-4.6.0\**" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="scripts\command.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="config\InstallConfig_demo.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-x64.pubxml" />
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\windows-x64.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="config\InstallConfig_demo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\iview\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\iview\fonts\ionicons.woff2" />
+    <None Include="wwwroot\js\lay-module\layuimini\miniAdmin.js" />
+    <None Include="wwwroot\js\lay-module\layuimini\miniMenu.js" />
+    <None Include="wwwroot\js\lay-module\layuimini\miniTab.js" />
+    <None Include="wwwroot\js\lay-module\layuimini\miniTheme.js" />
+    <None Include="wwwroot\js\lay-module\layuimini\miniTongji.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\base\worker\workerMain.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\abap\abap.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\apex\apex.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\azcli\azcli.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\bat\bat.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\bicep\bicep.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\cameligo\cameligo.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\clojure\clojure.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\coffee\coffee.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\cpp\cpp.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\csharp\csharp.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\csp\csp.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\css\css.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\dart\dart.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\dockerfile\dockerfile.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\ecl\ecl.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\elixir\elixir.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\fsharp\fsharp.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\go\go.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\graphql\graphql.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\handlebars\handlebars.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\hcl\hcl.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\html\html.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\ini\ini.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\javascript\javascript.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\java\java.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\julia\julia.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\kotlin\kotlin.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\less\less.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\lexon\lexon.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\liquid\liquid.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\lua\lua.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\m3\m3.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\markdown\markdown.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\mips\mips.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\msdax\msdax.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\mysql\mysql.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\objective-c\objective-c.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\pascaligo\pascaligo.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\pascal\pascal.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\perl\perl.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\pgsql\pgsql.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\php\php.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\postiats\postiats.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\powerquery\powerquery.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\powershell\powershell.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\pug\pug.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\python\python.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\qsharp\qsharp.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\razor\razor.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\redis\redis.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\redshift\redshift.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\restructuredtext\restructuredtext.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\ruby\ruby.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\rust\rust.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\r\r.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\sb\sb.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\scala\scala.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\scheme\scheme.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\scss\scss.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\shell\shell.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\solidity\solidity.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\sophia\sophia.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\sparql\sparql.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\sql\sql.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\st\st.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\swift\swift.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\systemverilog\systemverilog.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\tcl\tcl.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\twig\twig.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\typescript\typescript.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\vb\vb.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\xml\xml.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\basic-languages\yaml\yaml.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.de.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.es.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.fr.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.it.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.ja.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.ko.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.ru.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.zh-cn.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\editor\editor.main.nls.zh-tw.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\css\cssMode.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\css\cssWorker.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\html\htmlMode.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\html\htmlWorker.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\json\jsonMode.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\json\jsonWorker.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\typescript\tsMode.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\language\typescript\tsWorker.js" />
+    <None Include="wwwroot\monaco-editor\min\vs\loader.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QQBot.DB\QQBot.DB.csproj" />
+    <ProjectReference Include="..\QQBot.Entities\QQBot.Entities.csproj" />
+    <ProjectReference Include="..\QQBot.Job\QQBot.Job.csproj" />
+    <ProjectReference Include="..\QQBot.Utils\QQBot.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Dockerfile2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\jdCookie.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\qqbot_checkCookie.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\qqbot_huodong.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\qqbot_huodonglingqu.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\qqbot_jd_bean_change.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\qqbot_jd_month_bean_change.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\sendNotify.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scripts-bak\USER_AGENTS.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="update-windows.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="update-linux.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="update.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="db\import\" />
+    <Folder Include="scripts\" />
+  </ItemGroup>
+</Project>

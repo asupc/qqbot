@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../vue/vue.min.js"></script>
+    <link href="../iview/iview.css" rel="stylesheet" />
+    <style>
+        .alert-question { color: brown; font-size: 16px; }
+        .alert-answer { padding: 5px; }
+        #System-Config { padding: 15px; }
+    </style>
+</head>
+<body>
+    <div id="System-Config">
+        <alert show-icon>
+            <template slot="desc">
+                请参照以下内容修改你的go-cqhttp 的config.yml配置，未列出的部分保存原来的配置内容或者直接
+                <a target="_blank" style="color:red" href="../static/config.yml">下载</a> 后覆盖文件。
+                <p style="color:red">IP 地址填什么？</p> 执行命令：ifconfig -a 找到 docker0 下面一行 inet:xxx.xxx.xx..x 一般为 172.17.0.1， 或者直接服务器放行配置的两个端口配置外网IP
+            </template>
+        </alert>
+        <pre style="border:1px solid #cacaca; border-radius:5px;padding:5px;">
+    servers:
+        - http: # http协议设置
+            host: 0.0.0.0 # 服务端监听地址
+            port: 8000 # 服务端监听端口
+        - ws: # 正向WS设置
+            host: 0.0.0.0 # 正向WS服务器监听地址
+            port: 8001 # 正向WS服务器监听端口</pre>
+        <i-form ref="SystemConfig" :model="SystemConfig" :label-width="100" style="padding: 0 20px" :rules="ruleInline">
+            <blockquote class="layui-elem-quote">
+            </blockquote>
+            <row>
+                <i-col span="12">
+                    <form-item label="Http协议" prop="cqhttpHttp">
+                        <i-input type="text" name="cqhttpHttp" placeholder="填写示例：172.17.0.1:8000（只输入ip和端口号即可）" v-model="SystemConfig.cqhttpHttp">
+                            <span slot="prepend">http://</span>
+                        </i-input>
+                    </form-item>
+                </i-col>
+                <i-col span="12">
+                    <form-item label="WS协议" prop="cqhttpWS">
+                        <i-input type="text" name="cqhttpWS" placeholder="填写示例：172.17.0.1:8001（只输入ip和端口号即可）" v-model="SystemConfig.cqhttpWS">
+                            <span slot="prepend">ws://</span>
+                        </i-input>
+                    </form-item>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="12">
+                    <form-item label="管理员" prop="ManagerQQ">
+                        <i-input type="number" name="ManagerQQ" placeholder="管理员QQ号，用于发送管理员指令" v-model="SystemConfig.ManagerQQ">
+                        </i-input>
+                    </form-item>
+                </i-col>
+                <i-col span="12">
+                    <form-item label="监听群">
+                        <i-input type="text" name="Groups" placeholder="请填写要监控的QQ群，多个用英文逗号隔开" v-model="SystemConfig.Groups">
+                        </i-input>
+                    </form-item>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="12">
+                    <form-item label="NVJDC">
+                        <i-input type="text" name="SMSService" placeholder="请配置nvjdc服务地址，填写示例：172.17.0.1:5000" v-model="SystemConfig.SMSService">
+                            <span slot="prepend">http://</span><span slot="append">
+                                <input type="checkbox" name="SMSAllowGroup" id="SMSAllowGroup" v-model="SystemConfig.SMSAllowGroup">
+                                <label for="SMSAllowGroup">允许群内使用</label>
+                            </span>
+                        </i-input>
+                    </form-item>
+                </i-col>
+                <i-col span="12">
+                    <form-item label="短信黑名单">
+                        <i-input type="text" name="SMSBlackQQ" placeholder="黑名单QQ号，多个用英文逗号分割" v-model="SystemConfig.SMSBlackQQ">
+                        </i-input>
+                    </form-item>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="12">
+                    <form-item label="好友欢迎语">
+                        <i-input type="text" name="AddFriendMessage" placeholder="自动通过好友后向好友发送欢迎语" v-model="SystemConfig.AddFriendMessage">
+                            <span slot="append">
+                                <input type="checkbox" name="AddFriend" id="AddFriend" v-model="SystemConfig.AddFriend">
+                                <label for="AddFriend">自动通过</label>
+                            </span>
+                        </i-input>
+                    </form-item>
+                </i-col>
+                <i-col span="12">
+                    <form-item label="入群欢迎语">
+                        <i-input type="text" name="AddGroupMessage" placeholder="入群后向好友发送欢迎语" v-model="SystemConfig.AddGroupMessage">
+                            <span slot="append">
+                                <input type="checkbox" name="AddGroup" id="AddGroup" v-model="SystemConfig.AddGroup">
+                                <label for="AddGroup">自动通过</label>
+                            </span>
+                        </i-input>
+                    </form-item>
+                </i-col>
+            </row>
+            <form-item>
+                <i-button type="primary" @click="handleSubmit('SystemConfig')" style="float:right">保存</i-button>
+            </form-item>
+        </i-form>
+    </div>
+    <script src="../iview/iview.min.js"></script>
+    <script src="../vue/axios.min.js"></script>
+    <script>
+        var systemConfigApp = new Vue({
+            el: '#System-Config',
+            data: {
+                SystemConfig: {
+                },
+                UploadHeaders: {},
+                ruleInline: {
+                    cqhttpHttp: [{
+                        required: true,
+                        message: 'Http协议不能为空',
+                        trigger: 'blur'
+                    }],
+                    cqhttpWS: [{
+                        required: true,
+                        message: 'WS协议不能为空',
+                        trigger: 'blur'
+                    }],
+                    ManagerQQ: [{
+                        required: true,
+                        message: '管理员QQ不能为空',
+                        trigger: 'blur'
+                    }]
+
+                }
+            },
+            methods: {
+                handleSubmit(name) {
+                    this.$refs[name].validate((valid) => {
+                        if (valid) {
+                            this.$Modal.confirm({
+                                title: '提交确认',
+                                content: '确定提交修改的配置信息吗？',
+                                okText: '确定',
+                                cancelText: '取消',
+                                onOk: () => {
+                                    var d = JSON.parse(JSON.stringify(systemConfigApp.SystemConfig));
+                                    d.cqhttpHttp = "http://" + d.cqhttpHttp
+                                    if (d.SMSService) {
+                                        d.SMSService = "http://" + d.SMSService
+                                    }
+                                    d.cqhttpWS = "ws://" + d.cqhttpWS
+                                    console.log(d)
+                                    axios.post('/api/SystemConfig', d)
+                                        .then(function (response) {
+                                            systemConfigApp.$Notice.success({
+                                                desc: "更新配置信息成功！"
+                                            });
+                                        })
+                                        .catch(function (error) {
+                                            systemConfigApp.$Notice.error({
+                                                desc: error
+                                            });
+                                        });
+                                }
+                            });
+                        } else {
+                            this.$Notice.error({
+                                title: '基础配置验证失败',
+                                desc: '验证基础配置验证失败，请检查配置后重新提交！'
+                            });
+                        }
+                    })
+                },
+                getSystemConfig() {
+                    axios.get("/api/SystemConfig").then(function (response) {
+                        systemConfigApp.SystemConfig = response;
+                        if (systemConfigApp.SystemConfig.cqhttpHttp) {
+                            systemConfigApp.SystemConfig.cqhttpHttp = systemConfigApp.SystemConfig.cqhttpHttp.replace("http://", "")
+                        }
+                        if (systemConfigApp.SystemConfig.cqhttpWS) {
+                            systemConfigApp.SystemConfig.cqhttpWS = systemConfigApp.SystemConfig.cqhttpWS.replace("ws://", "")
+                        }
+                        if (systemConfigApp.SystemConfig.SMSService) {
+                            systemConfigApp.SystemConfig.SMSService = systemConfigApp.SystemConfig.SMSService.replace("http://", "")
+                        }
+                    });
+                }
+            },
+            mounted() {
+                this.getSystemConfig();
+            }
+        });
+    </script>
+</body>
+</html>

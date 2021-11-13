@@ -1,0 +1,13 @@
+{
+  "name": "QQBotScripts",
+  "version": "1.0.0",
+  "description": "QQBotScripts",
+  "author": "asuc <17919100150@qq.com>",
+  "private": true,
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "fs": "0.0.1-security",
+    "got": "^11.8.2",
+    "tough-cookie": "^4.0.0"
+  }
+}

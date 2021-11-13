@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <blockquote class="layui-elem-quote layui-text">
+                该功能用于导入xdd数据库。
+            </blockquote>
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库类型</label>
+
+                    <div class="layui-input-block">
+                        <input type="radio" name="DBType" value="SQLite" title="SQLite" checked="">
+                        <input type="radio" name="DBType" value="MySQL" title="MySQL">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="MySQL">
+                    <label class="layui-form-label">数据库地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="Address" name="Address" lay-verify="required" lay-reqtext="数据库必填" autocomplete="off" class="layui-input">
+
+                        <div class="layui-form-mid layui-word-aux">
+                            SQLite需要上传数据库文件，MySQL数据库连接示例：server=192.168.3.2;port=3306;database=xdd;Uid=root;Pwd=admin;CharSet=utf8
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block ">
+                        <button type="button" lay-data="{accept: 'file'}" class="layui-btn" id="upload">
+                            <i class="layui-icon">&#xe67c;</i>上传数据库
+                        </button>
+                        <button class="layui-btn" id="submit" lay-submit="" lay-filter="importData">立即提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+    <script>
+        layui.use(['form', 'layedit', 'laydate', "jquery", 'common'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.jquery,
+                common = layui.common
+            var upload = layui.upload;
+
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#upload',
+                url: '/api/upload',
+                accept: "flie",
+                done: function (res) {
+                    if (res.Code == 200) {
+                        $("#Address").val(res.Data.Path)
+                    }
+                },
+                headers: {
+                    "Authorization": "Bearer " + layui.data("token").token
+                },
+                error: function () { }
+            });
+
+            form.on('submit(importData)', function (data) {
+                common.ajax("/ImportDatabase", 'post', JSON.stringify(data.field), function () {
+                    layer.alert("数据导入成功！");
+                });
+                return false;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

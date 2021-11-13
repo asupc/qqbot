@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body { background-color: #ffffff; }
+    </style>
+</head>
+<body>
+    <form class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">脚本名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="Name" name="Name" class="layui-input" lay-verify="required" lay-reqtext="脚本名称不能为空">
+                <input type="hidden" id="Id" name="Id">
+                <input type="hidden" id="Enable" name="Enable" value="false">
+                <input type="hidden" id="ExecAllCookie" name="ExecAllCookie" value="false">
+                <input type="hidden" id="EnableConc" name="EnableConc" value="false">
+                <input type="hidden" id="EnablePush" name="EnablePush" value="false">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">执行命令</label>
+            <div class="layui-input-block">
+                <input type="text" id="Command" name="Command" class="layui-input" lay-verify="required" lay-reqtext="执行命令不能为空">
+                <div class="layui-form-mid layui-word-aux">
+                    管理员使用推送 +执行指令可以全员推送脚本执行结果，如（推送 查询）
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">脚本文件</label>
+            <div class="layui-input-block">
+                <input type="text" id="FileName" onclick="javascript: document.getElementById('upload').click()" name="FileName" readonly="readonly" lay-verify="required" lay-reqtext="请上传脚本文件" placeholder="点击上传执行的js脚本" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">执行限制</label>
+            <div class="layui-input-block">
+                <input type="number" id="MaxCount" value="0" name="MaxCount" class="layui-input" lay-verify="required" lay-reqtext="执行限制不能为空" placeholder="限制一天内用户执行脚本次数，为0则不限制">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">定时执行  </label>
+            <div class="layui-input-block">
+                <input type="text" id="Cron" name="Cron" class="layui-input" placeholder="填写的cron表达最好在生成工具反解析查看检测">
+                <div class="layui-form-mid layui-word-aux">
+                    不填不自动执行，定时执行表达式和青龙不通用，Cron表达式生成工具<a target="_blank" href="http://cron.ciding.cc/">http://cron.ciding.cc/</a>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">并发限制</label>
+            <div class="layui-input-block">
+                <input type="number" id="ConcCount" value="0" name="MaxCount" class="layui-input" lay-verify="required" lay-reqtext="并发线程数">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                是否启用
+                <i class="layui-icon tips" style="color:forestgreen" data-title="该脚本的全局开关，禁用后该脚本不执行。">&#xe60b;</i>
+            </label>
+            <div class="layui-input-inline">
+                <input type="checkbox" lay-skin="switch" lay-filter="Enable_CKB" lay-text="启用|禁用">
+            </div>
+            <label class="layui-form-label">
+                脚本并发
+                <i class="layui-icon tips" style="color:forestgreen" data-title="谨慎开启，开启后将同时执行多个账号。">&#xe60b;</i>
+            </label>
+            <div class="layui-input-inline">
+                <input type="checkbox" lay-skin="switch" lay-filter="EnableConc_CKB" lay-text="启用|禁用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                全量执行
+                <i class="layui-icon tips" style="color:forestgreen" data-title="开启后未绑定QQ的账号也会执行脚本">&#xe60b;</i>
+            </label>
+            <div class="layui-input-inline">
+                <input type="checkbox" lay-skin="switch" lay-filter="ExecAllCookie_CKB" lay-text="开启|关闭">
+            </div>
+            <label class="layui-form-label">
+                消息推送
+                <i class="layui-icon tips" style="color:forestgreen" data-title="开启后将把执行结果推送到绑定的QQ号">&#xe60b;</i>
+            </label>
+            <div class="layui-input-inline">
+                <input type="checkbox" lay-skin="switch" lay-filter="EnablePush_CKB" lay-text="开启|关闭">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="file" accept=".js" style="display:none" id="upload" />
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+            </div>
+        </div>
+    </form>
+    <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js"></script>
+
+    <script>
+        layui.use(['form', "common"], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                common = layui.common,
+                $ = layui.$;
+            var upload = layui.upload;
+
+            var id = common.queryString("id");
+            if (id) {
+                common.ajax("/Task/" + id, "get", {}, function (data) {
+                    if (data) {
+                        $("#Name").val(data.Name);
+                        $("#Command").val(data.Command);
+                        $("#FileName").val(data.FileName);
+                        $("#MaxCount").val(data.MaxCount);
+                        $("#Id").val(data.Id);
+                        $("#Cron").val(data.Cron);
+                        if (data.EnableConc) {
+                            var node = $(`input[type="checkbox"][lay-filter^="EnableConc_CKB"]`);
+                            node[0].checked = true;
+                            $("#EnableConc").val(true);
+                        } if (data.ExecAllCookie) {
+                            var node = $(`input[type="checkbox"][lay-filter^="ExecAllCookie_CKB"]`);
+                            node[0].checked = true;
+                            $("#ExecAllCookie").val(true);
+                        } if (data.Enable) {
+                            var node = $(`input[type="checkbox"][lay-filter^="Enable_CKB"]`);
+                            node[0].checked = true;
+                            $("#Enable").val(true);
+                        }
+                        if (data.EnablePush) {
+                            var node = $(`input[type="checkbox"][lay-filter^="EnablePush_CKB"]`);
+                            node[0].checked = true;
+                            $("#EnablePush").val(true);
+                        }
+
+                        form.render();
+                    }
+                });
+            }
+
+            $(".tips").click((obj) => {
+                obj = obj.target;
+                var title = $(obj).data("title")
+                if (title) {
+                    layer.tips(title, $(obj), {
+                        tips: 1
+                    });
+                }
+            })
+
+            form.on('switch(ExecAllCookie_CKB)', function (data) {
+                $("#ExecAllCookie").val(this.checked);
+            });
+            form.on('switch(Enable_CKB)', function (data) {
+                $("#Enable").val(this.checked);
+            });
+            form.on('switch(EnableConc_CKB)', function (data) {
+                $("#EnableConc").val(this.checked);
+            });
+            form.on('switch(EnablePush_CKB)', function (data) {
+                $("#EnablePush").val(this.checked);
+            });
+
+            //执行实例
+            upload.render({
+                elem: '#upload', //绑定元素
+                url: '/api/upload/scripts', //上传接口
+                accept: 'file',
+                exts: 'js',//限制上传文件的后缀名，用|分
+                done: function (res) {
+                    if (res.Code == 200) {
+                        $("#FileName").val(res.Data.FileName)
+                    } else {
+
+                    }
+                }, headers: { "Authorization": "Bearer " + layui.data("token").token }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                common.ajax("/Task", "post", JSON.stringify(data.field), function (data) {
+                    parent.layer.closeAll();
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>
