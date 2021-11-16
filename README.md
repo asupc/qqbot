@@ -22,7 +22,6 @@
 ## 框架关键词：
 ## .net core,Quartz,EntityFrameWork,Dapper,vue,iview,layui。
 
-## QQBot安装教程：
-https://docs.qq.com/doc/DR3ZScGFSd1lFdWV3
-## QQBot功能说明：
-https://docs.qq.com/doc/DR0RtZ211cnhZaFJC
+# 功能说明：https://docs.qq.com/doc/DR0RtZ211cnhZaFJC
+# 安装教程：https://docs.qq.com/doc/DR3ZScGFSd1lFdWV3
+# 常见问题：https://docs.qq.com/doc/DR05JalZ4T1hrTElW
